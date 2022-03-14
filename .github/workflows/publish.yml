@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: 12.14.1
+  NODE_VERSION: 16.14.0
 
 jobs:
   publish:
