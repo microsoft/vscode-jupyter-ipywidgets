@@ -1,0 +1,46 @@
+# Build and test script to run on PR and main build
+name: Build and Test
+
+permissions:
+  deployments: write
+
+on:
+  pull_request:
+    branches:
+      - main
+  check_run:
+    types: [rerequested, requested_action]
+
+env:
+  NODE_VERSION: 16.14.0
+  IS_CI: 1
+  SCREENSHOT_PATH: 'src/test/*-screenshot.png'
+
+jobs:
+  filecheck:
+    name: Check for package.json edit
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Check for package.json edit'
+        uses: brettcannon/check-for-changed-files@v1.1.0
+        with:
+          file-pattern: 'package.json'
+          skip-label: 'skip package.json'
+          failure-message: 'Package.json must be changed on every submission in order for publish to work'
+  build:
+    name: Build Distribution
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node ${{env.NODE_VERSION}}
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: ${{env.NODE_VERSION}}
+
+      - run: npm install
+        name: npm install
+
+      - run: npm run build
+        name: webpack for production

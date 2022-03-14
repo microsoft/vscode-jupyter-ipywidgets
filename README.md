@@ -1,18 +1,36 @@
-# Project
+# This folder is based off the the sample `web3` from https://github.com/jupyter-widgets/ipywidgets/blob/master/examples/web3
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+-   We have built a custom solution based on `web3` sample to host ipywidgets outside of `Jupyter Notebook`.
 
-As the maintainer of this project, please make a few updates:
+# Warning
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+-   Most of the code has been copied as is from `https://github.com/jupyter-widgets/ipywidgets/blob/master/examples/web3` & `https://github.com/jupyter-widgets/ipywidgets/blob/master/packages/html-manager/webpack.config.js`.
+    -   Please try to minimize changes to original code to facilitate easier updatess.
+
+# Solution for IPywidgets
+
+-   IPywidgets traditionally use [requirejs](https://requirejs.org).
+    -   `traditionally` as there seems to be some ongoing work to use `commonjs2`, though unsure how this will work with 3rd party widgets.
+-   Using 3rd party widgets require:
+    -   [requirejs](https://requirejs.org) to be available in the current browser context (i.e. `window`)
+    -   Base `IPywidgets` to be defined using `define` in [requirejs](https://requirejs.org).
+-   Rather than bundling using `amd` or `umd` its easier to just import everything using `commonjs2`, then export for `requirejs` using `define` by hand.
+    -   `define('xyz', () => 'a')` is a simple way of declaring a named `xyz` module with the value `a` (using `requirejs`).
+    -   This is generally done using tools, however we'll hand craft this as it works better and easier.
+    -   `amd` is not what we want, as out `react ui` doesn't use `amd`.
+    -   `umd` is does not work as we have multiple `entry points` in `webpack`.
+    -   Heres' the solution `define('@jupyter-widgets/controls', () => widgets);`
+-   We bundling the widget controls into our JS and exposing them for AMD using `define`
+    -   We could instead include `https://unpkg.com/browse/@jupyter-widgets/html-manager@0.18.3/dist/embed-amd.js`
+    -   However this is a 3.2MB file.
+    -   Then our Widget manager also needs the widget controls. That would mean widget controls get included twice, once in our bundle and the other in the above mentioned `embed-amd.js` file.
+    -   Solution is to include everything thats in `embed-amd.js` into our bundle.
+-   We need types for `requirejs`, but installing this into `node_modules`, for extension causes conflicts as we use `require` in standard node (extension and UI).
+    -   Solution is to just copy the `@types/requirejs/index.d.ts` into the `types` folder.
 
 ## Contributing
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
+This project welcomes contributions and suggestions. Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
 the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
 
@@ -24,10 +42,28 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-## Trademarks
+### Directions for building
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
+You might want to setup an npm link for the python repository
+
+- git clone https://github.com/microsoft/vscode-jupyter.git
+- git clone https://github.com/microsoft/vscode-jupyter-ipywidgets.git
+- cd vscode-jupyter-lsp-ipywidgets
+- npm link
+- cd ..\vscode-jupyter
+- npm link @vscode/jupyter-ipywidgets (the name of the node module in python)
+
+Then to build vscode-jupyter-ipywidgets
+
+- npm run download-api (updates vscode.d.ts)
+- npm run webpack (which will setup stuff for using with vscode-python)
+
+### Directions for debugging with jupyter extension
+
+- Run the steps above for getting the npm link setup
+- From with VS code, open both jupyter and lsp-middleware as two folders
+- Build the 'webpack link' task for lsp-middleware
+- Build the compile task for jupyter
+- Set breakpoints in the dist/node/index.js file while debugging (it's a development webpack)
+- Edit lsp code
+- Rerun the 'webpack link' build every time (it doesn't watch as it runs a post build step)
