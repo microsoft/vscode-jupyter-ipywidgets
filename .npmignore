@@ -7,7 +7,6 @@ node_modules
 src
 .github
 build
-scripts
 *.js
 types
 tsconfig.*
