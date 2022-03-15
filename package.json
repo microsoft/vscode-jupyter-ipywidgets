@@ -1,6 +1,6 @@
 {
     "name": "@vscode/jupyter-ipywidgets",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "main": "dist/ipywidgets.js",
     "license": "MIT",
     "repository": {
@@ -15,7 +15,7 @@
         "build:dev": "npm run clean && tsc && node scripts/copyfiles.js && webpack",
         "clean": "rimraf out && rimraf tsconfig.tsbuildinfo && rimraf dist",
         "lint": "tslint --project tsconfig.json",
-        "preinstall": "npx npm-force-resolutions",
+        "preinstall": "npx force-resolutions",
         "postinstall": "node scripts/postInstall.js"
     },
     "dependencies": {
