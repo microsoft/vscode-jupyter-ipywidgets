@@ -1,6 +1,6 @@
 {
     "name": "@vscode/jupyter-ipywidgets",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "main": "dist/ipywidgets.js",
     "license": "MIT",
     "repository": {
@@ -19,6 +19,8 @@
         "postinstall": "node scripts/postInstall.js"
     },
     "dependencies": {
+    },
+    "devDependencies": {
         "@jupyter-widgets/base": "^4.0.0",
         "@jupyter-widgets/controls": "^3.0.0",
         "@jupyter-widgets/jupyterlab-manager": "^3.0.1",
@@ -27,9 +29,7 @@
         "font-awesome": "^4.7.0",
         "fs-extra": "^10.0.1",
         "isarray": "^2.0.5",
-        "marked": "^4.0.10"
-    },
-    "devDependencies": {
+        "marked": "^4.0.10",
         "css-loader": "^6.7.1",
         "npm-force-resolutions": "0.0.10",
         "postcss": "^8.4.8",
