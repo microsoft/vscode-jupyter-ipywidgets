@@ -6,8 +6,6 @@
 // tslint:disable-next-line: no-any
 async function requirePromise(pkg: string | string[]): Promise<any> {
     return new Promise((resolve, reject) => {
-        // tslint:disable-next-line: no-console
-        console.log('require promise');
         // tslint:disable-next-line: no-any
         const requirejsfunc = (requirejs as any) || (window as any).requirejs;
         if (requirejsfunc === undefined) {

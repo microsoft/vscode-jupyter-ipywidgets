@@ -8,8 +8,15 @@ import * as embed from './embed';
 import { WidgetManager } from './manager';
 import './widgets.css';
 
+type KernelMessagingApi = {
+    postKernelMessage: (data: unknown) => void;
+};
+
+// Default logger is console.log
+let logger = console.log;
+
 // Export the following for `requirejs`.
-// tslint:disable-next-line: no-any no-function-expression no-empty
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, no-empty,@typescript-eslint/no-empty-function
 const define = (window as any).define || function () {};
 define('@jupyter-widgets/controls', () => widgets);
 define('@jupyter-widgets/base', () => base);
@@ -19,10 +26,10 @@ define('@jupyter-widgets/output', () => outputWidgets);
 // This is not done yet. See this issue here: https://github.com/microsoft/vscode-python/issues/10794
 // Likely we'll do this in a different spot.
 if (document.readyState === 'complete') {
-    embed.renderWidgets();
+    embed.renderWidgets(document.documentElement, logger);
 } else {
     window.addEventListener('load', () => {
-        embed.renderWidgets();
+        embed.renderWidgets(document.documentElement, logger);
     });
 }
 
@@ -31,3 +38,16 @@ if (document.readyState === 'complete') {
 (window as any).vscIPyWidgets = {
     WidgetManager
 };
+
+// Has to be this form for VS code to load it correctly
+export function activate(context?: KernelMessagingApi) {
+    // Setup the logger function
+    if (context) {
+        logger = (msg) => {
+            context.postKernelMessage({
+                type: 'IPyWidgets_logMessage',
+                payload: msg
+            });
+        };
+    }
+}
