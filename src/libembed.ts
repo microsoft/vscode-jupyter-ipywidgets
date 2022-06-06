@@ -3,7 +3,7 @@
 
 declare let __webpack_public_path__: string;
 // tslint:disable: no-var-requires no-require-imports no-any
-// eslint-disable-next-line prefer-const
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 __webpack_public_path__ = (window as any).__jupyter_widgets_assets_path__ || __webpack_public_path__;
 
 import '@lumino/widgets/style/index.css';

@@ -6,6 +6,7 @@ import * as wm from './manager';
 
 let cdn = 'https://unpkg.com/';
 let onlyCDN = false;
+let consoleLogger = console.log;
 
 // find the data-cdn for any script tag, assuming it is only used for embed-amd.js
 const scripts = document.getElementsByTagName('script');
@@ -75,16 +76,16 @@ export function requireLoader(moduleName: string, moduleVersion: string): Promis
         return requirePromise([`${moduleName}`]);
     }
     if (onlyCDN) {
-        window.console.log(`Loading from ${cdn} for ${moduleName}@${moduleVersion}`);
+        consoleLogger(`Loading from ${cdn} for ${moduleName}@${moduleVersion}`);
         return loadFromCDN();
     }
     return requirePromise([`${moduleName}`]).catch((err) => {
         const failedId = err.requireModules && err.requireModules[0];
         if (failedId) {
             require.undef(failedId);
-            window.console.log(`Falling back to ${cdn} for ${moduleName}@${moduleVersion}`);
+            consoleLogger(`Falling back to ${cdn} for ${moduleName}@${moduleVersion}`);
             loadFromCDN().catch((x) => {
-                window.console.error(x);
+                consoleLogger(x.toString());
             });
         }
     });
@@ -97,7 +98,8 @@ export function requireLoader(moduleName: string, moduleVersion: string): Promis
  * @param loader (default requireLoader) The function used to look up the modules containing
  * the widgets' models and views classes. (The default loader looks them up on unpkg.com)
  */
-export function renderWidgets(element = document.documentElement): void {
+export function renderWidgets(element = document.documentElement, logger: (msg: string) => void = console.log): void {
+    consoleLogger = logger;
     const managerFactory = (): any => {
         return new wm.WidgetManager(
             undefined,
@@ -108,10 +110,10 @@ export function renderWidgets(element = document.documentElement): void {
                 loadWidgetScript: (_moduleName: string, _moduleVersion: string) => Promise.resolve(),
                 successHandler: () => 'Success'
             },
-            (message: string) => console.log(message)
+            (message: string) => logger(message)
         );
     };
     libembed.renderWidgets(managerFactory, element).catch((x) => {
-        window.console.error(x);
+        consoleLogger(x.toString());
     });
 }

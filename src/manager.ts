@@ -103,7 +103,7 @@ export class WidgetManager extends jupyterlab.WidgetManager {
 
     protected async loadClass(className: string, moduleName: string, moduleVersion: string): Promise<any> {
         // Call the base class to try and load. If that fails, look locally
-        window.console.log(`WidgetManager: Loading class ${className}:${moduleName}:${moduleVersion}`);
+        this.logger(`WidgetManager: Loading class ${className}:${moduleName}:${moduleVersion}`);
         // tslint:disable-next-line: no-unnecessary-local-variable
         const result = await super
             .loadClass(className, moduleName, moduleVersion)
