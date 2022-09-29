@@ -3,9 +3,9 @@
 
 'use strict';
 
-import { shims } from '@jupyter-widgets/base';
+import { DOMWidgetView, shims } from '@jupyter-widgets/base';
 import * as jupyterlab from '@jupyter-widgets/jupyterlab-manager';
-import { RenderMimeRegistry, standardRendererFactories } from '@jupyterlab/rendermime';
+import { IRenderMime, RenderMimeRegistry, standardRendererFactories } from '@jupyterlab/rendermime';
 import { Kernel } from '@jupyterlab/services';
 import { Widget } from '@lumino/widgets';
 import { DocumentContext } from './documentContext';
@@ -20,7 +20,10 @@ export const WIDGET_MIMETYPE = 'application/vnd.jupyter.widget-view+json';
 const widgetsRegisteredInRequireJs = ['@jupyter-widgets/controls', '@jupyter-widgets/base', '@jupyter-widgets/output'];
 
 export class WidgetManager extends jupyterlab.WidgetManager {
-    public kernel: Kernel.IKernelConnection;
+    private _kernel: Kernel.IKernelConnection;
+    public get kernel(): Kernel.IKernelConnection {
+        return this._kernel;
+    }
     public el: HTMLElement;
 
     constructor(
@@ -41,13 +44,13 @@ export class WidgetManager extends jupyterlab.WidgetManager {
             }),
             { saveState: false }
         );
-        this.kernel = kernel;
+        this._kernel = kernel;
         this.el = el;
         this.rendermime.addFactory(
             {
                 safe: false,
                 mimeTypes: [WIDGET_MIMETYPE],
-                createRenderer: (options) => new jupyterlab.WidgetRenderer(options, this)
+                createRenderer: (options: IRenderMime.IRendererOptions) => new jupyterlab.WidgetRenderer(options, this)
             },
             0
         );
@@ -82,14 +85,13 @@ export class WidgetManager extends jupyterlab.WidgetManager {
             .requestCommInfo({ target_name: this.comm_target_name })
             .then((reply) => (reply.content as any).comms);
     }
-    public async display_view(msg: any, view: Backbone.View<Backbone.Model>, options: any): Promise<Widget> {
-        const widget = await super.display_view(msg, view, options);
+    public async display_view(_msg: any, view: DOMWidgetView, options: any): Promise<Widget> {
         const element = options.node ? (options.node as HTMLElement) : this.el;
         // When do we detach?
         if (element) {
-            Widget.attach(widget, element);
+            Widget.attach(view.luminoWidget, element);
         }
-        return widget;
+        return view.luminoWidget;
     }
     public async restoreWidgets(): Promise<void> {
         // Disabled for now.
@@ -123,14 +125,20 @@ export class WidgetManager extends jupyterlab.WidgetManager {
                         // If possible the loader will locate and register that in requirejs for things to start working.
                         await this.scriptLoader.loadWidgetScript(moduleName, moduleVersion);
                     }
+                    console.error(`Step1: Loading widget module ${moduleName}`);
                     const m = await requireLoader(moduleName);
+                    console.error(`Step2: Loading widget module ${moduleName}`);
                     if (m && m[className]) {
+                        console.error(`Step3: Loading widget module ${moduleName}`);
                         this.sendSuccess(className, moduleName, moduleVersion);
+                        console.error(`Step4: Loading widget module ${moduleName}`);
                         return m[className];
                     }
+                    console.error(`Step5: Loading widget module ${moduleName}`);
                     this.logger(`WidgetManager: failed, Loading class ${className}:${moduleName}:${moduleVersion}`);
                     throw originalException;
                 } catch (ex) {
+                    console.error(`Step6: Loading widget module ${moduleName}`);
                     this.logger(`WidgetManager: failed, Loading class ${className}:${moduleName}:${moduleVersion}`);
                     this.sendError(className, moduleName, moduleVersion, originalException);
                     throw originalException;

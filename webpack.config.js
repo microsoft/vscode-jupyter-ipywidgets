@@ -9,6 +9,7 @@ const postcss = require('postcss');
 const common = require('./build/webpack/common');
 const path = require('path');
 const constants = require('./build/constants');
+const webpack = require('webpack');
 const outDir = path.join(__dirname, 'out');
 // Any build on the CI is considered production mode.
 const isProdBuild = constants.isCI || process.argv.includes('--mode');
@@ -18,11 +19,11 @@ module.exports = [
         devtool: isProdBuild ? 'source-map' : 'inline-source-map',
         entry: path.join(outDir, 'index.js'),
         cache: true,
-		experiments: {
+        experiments: {
             outputModule: true
         },
         output: {
-			library: {
+            library: {
                 type: 'module'
             },
             filename: 'ipywidgets.js',
@@ -33,7 +34,12 @@ module.exports = [
         resolve: {
             modules: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, './')]
         },
-        plugins: [...common.getDefaultPlugins('ipywidgets')],
+        plugins: [
+            ...common.getDefaultPlugins('ipywidgets'),
+            new webpack.optimize.LimitChunkCountPlugin({
+                maxChunks: 1
+            })
+        ],
         module: {
             rules: [
                 {
