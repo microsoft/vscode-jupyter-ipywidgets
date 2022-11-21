@@ -11,3 +11,4 @@ build
 types
 tsconfig.*
 !scripts/**/*.js
+~.azure-pipelines/**
