@@ -25,7 +25,6 @@ extends:
   parameters:
     npmPackages:
       - name: jupyter-ipywidgets7
-			  generateNotice: true
         testPlatforms: []
 
         buildSteps:
