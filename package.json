@@ -1,6 +1,6 @@
 {
     "name": "@vscode/jupyter-ipywidgets7",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "dist/ipywidgets.js",
     "license": "MIT",
     "repository": {
