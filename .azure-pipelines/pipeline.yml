@@ -16,7 +16,7 @@ resources:
 
 parameters:
   - name: publishPackage
-    displayName: 🚀 Publish @vscode/jupyter-ipywidgets-
+    displayName: 🚀 Publish @vscode/jupyter-ipywidgets7
     type: boolean
     default: false
 
