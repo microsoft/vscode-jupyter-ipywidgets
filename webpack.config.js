@@ -18,8 +18,13 @@ module.exports = [
         devtool: isProdBuild ? 'source-map' : 'inline-source-map',
         entry: path.join(outDir, 'index.js'),
         cache: true,
-        externals: ['crypto'],
+		experiments: {
+            outputModule: true
+        },
         output: {
+			library: {
+                type: 'module'
+            },
             filename: 'ipywidgets.js',
             path: path.join(__dirname, 'dist'),
             publicPath: 'built/',
