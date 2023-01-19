@@ -1,6 +1,6 @@
 {
     "name": "@vscode/jupyter-ipywidgets7",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "main": "dist/ipywidgets.js",
     "license": "MIT",
     "repository": {
@@ -18,8 +18,7 @@
         "build": "node scripts/postInstall.js && npm run clean && tsc && node scripts/copyfiles.js && webpack --mode=production",
         "build:dev": "node scripts/postInstall.js &&  npm run clean && tsc && node scripts/copyfiles.js && webpack",
         "clean": "rimraf out && rimraf tsconfig.tsbuildinfo && rimraf dist",
-        "lint": "eslint -c .eslintrc.js --ext .ts src",
-        "preinstall": "npx force-resolutions"
+        "lint": "eslint -c .eslintrc.js --ext .ts src"
     },
     "devDependencies": {
         "@jupyter-widgets/base": "^4.0.0",
@@ -47,8 +46,6 @@
         "font-awesome": "^4.7.0",
         "fs-extra": "^10.0.1",
         "isarray": "^2.0.5",
-        "marked": "^4.0.10",
-        "npm-force-resolutions": "0.0.10",
         "postcss": "^8.4.8",
         "postcss-import": "^14.0.2",
         "postcss-loader": "^6.2.1",
@@ -60,8 +57,7 @@
         "webpack": "^5.70.0",
         "webpack-cli": "^4.9.2"
     },
-    "resolutions": {
-        "marked": "4.0.10",
-        "node-fetch": "2.6.7"
-    }
+	"overrides-change-to-overrides-to-pin-child-dependencies-in-lock-file":{
+		"json5": "2.2.3"
+	}
 }
