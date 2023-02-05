@@ -82,8 +82,8 @@ async function renderManager(
                 widgetTag.className = 'widget-subarea';
                 viewtag.parentElement.insertBefore(widgetTag, viewtag);
                 const view = await manager.create_view(model, { node: widgetTag });
-                manager.display_view('display_view', view, {}).catch((x) => {
-                    window.console.error(x);
+                manager.display_view('display_view', view, {}).catch((ex) => {
+                    window.console.error(`Failed to display the Widget View for model ${model.id}`, ex);
                 });
             }
         })
