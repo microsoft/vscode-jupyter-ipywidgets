@@ -125,20 +125,14 @@ export class WidgetManager extends jupyterlab.WidgetManager {
                         // If possible the loader will locate and register that in requirejs for things to start working.
                         await this.scriptLoader.loadWidgetScript(moduleName, moduleVersion);
                     }
-                    console.error(`Step1: Loading widget module ${moduleName}`);
                     const m = await requireLoader(moduleName);
-                    console.error(`Step2: Loading widget module ${moduleName}`);
                     if (m && m[className]) {
-                        console.error(`Step3: Loading widget module ${moduleName}`);
                         this.sendSuccess(className, moduleName, moduleVersion);
-                        console.error(`Step4: Loading widget module ${moduleName}`);
                         return m[className];
                     }
-                    console.error(`Step5: Loading widget module ${moduleName}`);
                     this.logger(`WidgetManager: failed, Loading class ${className}:${moduleName}:${moduleVersion}`);
                     throw originalException;
                 } catch (ex) {
-                    console.error(`Step6: Loading widget module ${moduleName}`);
                     this.logger(`WidgetManager: failed, Loading class ${className}:${moduleName}:${moduleVersion}`);
                     this.sendError(className, moduleName, moduleVersion, originalException);
                     throw originalException;
