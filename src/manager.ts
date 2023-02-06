@@ -5,6 +5,7 @@
 
 import { DOMWidgetView, shims } from '@jupyter-widgets/base';
 import * as jupyterlab from '@jupyter-widgets/jupyterlab-manager';
+import { INotebookModel } from '@jupyterlab/notebook';
 import { IRenderMime, RenderMimeRegistry, standardRendererFactories } from '@jupyterlab/rendermime';
 import { Kernel } from '@jupyterlab/services';
 import { Widget } from '@lumino/widgets';
@@ -19,6 +20,7 @@ export const WIDGET_MIMETYPE = 'application/vnd.jupyter.widget-view+json';
 // These widgets can always be loaded from requirejs (as it is bundled).
 const widgetsRegisteredInRequireJs = ['@jupyter-widgets/controls', '@jupyter-widgets/base', '@jupyter-widgets/output'];
 
+console.error('WidgetManager Initialized');
 export class WidgetManager extends jupyterlab.WidgetManager {
     private _kernel: Kernel.IKernelConnection;
     public get kernel(): Kernel.IKernelConnection {
@@ -35,7 +37,8 @@ export class WidgetManager extends jupyterlab.WidgetManager {
             loadWidgetScript(moduleName: string, moduleVersion: string): Promise<void>;
             successHandler(className: string, moduleName: string, moduleVersion: string): void;
         },
-        private readonly logger: (message: string) => void
+        private readonly logger: (message: string) => void,
+        private readonly widgetState?: {}
     ) {
         super(
             new DocumentContext(kernel),
@@ -81,6 +84,10 @@ export class WidgetManager extends jupyterlab.WidgetManager {
      * Get the currently-registered comms.
      */
     public _get_comm_info(): Promise<any> {
+        if (this.widgetState && !this.kernel.username && !this.kernel.clientId && !this.kernel.id) {
+            // Used to load widget state.
+            return Promise.resolve({});
+        }
         return this.kernel
             .requestCommInfo({ target_name: this.comm_target_name })
             .then((reply) => (reply.content as any).comms);
@@ -93,9 +100,18 @@ export class WidgetManager extends jupyterlab.WidgetManager {
         }
         return view.luminoWidget;
     }
-    public async restoreWidgets(): Promise<void> {
+    public async restoreWidgets(
+        notebook: INotebookModel,
+        options?: {
+            loadKernel: boolean;
+            loadNotebook: boolean;
+        }
+    ): Promise<void> {
         // Disabled for now.
         // This throws errors if enabled, can be added later.
+        if (notebook && options?.loadNotebook && !options?.loadKernel) {
+            return super.restoreWidgets(notebook, options);
+        }
     }
 
     // @ts-ignore https://devblogs.microsoft.com/typescript/announcing-typescript-4-0-rc/#properties-overridding-accessors-and-vice-versa-is-an-error
