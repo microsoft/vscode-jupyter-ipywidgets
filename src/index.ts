@@ -26,6 +26,7 @@ function load() {
     (window as any).vscIPyWidgets = {
         WidgetManager
     };
+	loaded = true;
 }
 function unload() {
     if (!loaded) {
