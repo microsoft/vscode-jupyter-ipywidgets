@@ -20,7 +20,6 @@ export const WIDGET_MIMETYPE = 'application/vnd.jupyter.widget-view+json';
 // These widgets can always be loaded from requirejs (as it is bundled).
 const widgetsRegisteredInRequireJs = ['@jupyter-widgets/controls', '@jupyter-widgets/base', '@jupyter-widgets/output'];
 
-console.error('WidgetManager Initialized');
 export class WidgetManager extends jupyterlab.WidgetManager {
     private _kernel: Kernel.IKernelConnection;
     public get kernel(): Kernel.IKernelConnection {
@@ -28,6 +27,20 @@ export class WidgetManager extends jupyterlab.WidgetManager {
     }
     public el: HTMLElement;
 
+    /**
+     * Creates an instance of WidgetManager.
+     * @param {Kernel.IKernelConnection} kernel
+     * @param {HTMLElement} el
+     * @param {{
+     *             readonly widgetsRegisteredInRequireJs: Readonly<Set<string>>;
+     *             errorHandler(className: string, moduleName: string, moduleVersion: string, error: any): void;
+     *             loadWidgetScript(moduleName: string, moduleVersion: string): Promise<void>;
+     *             successHandler(className: string, moduleName: string, moduleVersion: string): void;
+     *         }} scriptLoader
+     * @param {(message: string) => void} logger
+     * @param {{}} [widgetState] The widget state saved in the Notebook metadata. Pass this value if required to load widget state from the Notebook.
+     * @memberof WidgetManager
+     */
     constructor(
         kernel: Kernel.IKernelConnection,
         el: HTMLElement,
@@ -107,8 +120,8 @@ export class WidgetManager extends jupyterlab.WidgetManager {
             loadNotebook: boolean;
         }
     ): Promise<void> {
-        // Disabled for now.
-        // This throws errors if enabled, can be added later.
+        // Hardcoded to only support loading widgets from the notebook.
+        // This is called from the Jupyter extension in vscode.
         if (notebook && options?.loadNotebook && !options?.loadKernel) {
             return super.restoreWidgets(notebook, options);
         }
