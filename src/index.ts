@@ -5,7 +5,6 @@ import * as base from '@jupyter-widgets/base';
 import * as widgets from '@jupyter-widgets/controls';
 import * as outputWidgets from '@jupyter-widgets/jupyterlab-manager/lib/output';
 import { WidgetManager } from './manager';
-import './widgets.css';
 
 let loaded = false;
 function load() {
@@ -13,6 +12,7 @@ function load() {
         console.warn('Already loaded ipywidgets8');
         return;
     }
+    require('./widgets.css');
     console.error('Initializing ipywidgets8');
     // Export the following for `requirejs`.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-empty,@typescript-eslint/no-empty-function
@@ -26,7 +26,7 @@ function load() {
     (window as any).vscIPyWidgets = {
         WidgetManager
     };
-	loaded = true;
+    loaded = true;
 }
 function unload() {
     if (!loaded) {
