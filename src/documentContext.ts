@@ -20,10 +20,10 @@ type IKernelChangedArgs = IChangedArgs<Kernel.IKernelConnection | null, Kernel.I
 
 // tslint:disable: no-any
 export class DocumentContext implements DocumentRegistry.IContext<INotebookModel>, ISessionContext {
-    public pathChanged = new Signal<this, string>();
-    public fileChanged = new Signal<this, Contents.IModel>();
-    public saveState = new Signal<this, DocumentRegistry.SaveState>();
-    public disposed = new Signal<this, void>();
+    public pathChanged = new Signal<this, string>(this);
+    public fileChanged = new Signal<this, Contents.IModel>(this);
+    public saveState = new Signal<this, DocumentRegistry.SaveState>(this);
+    public disposed = new Signal<this, void>(this);
     public model: INotebookModel;
     public sessionContext: ISessionContext = this;
     private sessionConnection: ISessionConnection;
@@ -34,12 +34,14 @@ export class DocumentContext implements DocumentRegistry.IContext<INotebookModel
     public isReady: boolean;
     public ready: Promise<void>;
     public isDisposed: boolean;
-    public terminated = new Signal<this, void>();
-    public kernelChanged = new Signal<this, IKernelChangedArgs>();
-    public sessionChanged = new Signal<this, IChangedArgs<ISessionConnection, ISessionConnection, 'session'>>();
-    public propertyChanged = new Signal<this, 'path' | 'name' | 'type'>();
+    public terminated = new Signal<this, void>(this);
+    public kernelChanged = new Signal<this, IKernelChangedArgs>(this);
+    public sessionChanged = new Signal<this, IChangedArgs<ISessionConnection, ISessionConnection, 'session'>>(this);
+    public propertyChanged = new Signal<this, 'path' | 'name' | 'type'>(this);
     public name: string;
     public type: string;
+    public lastModifiedCheckMargin: number;
+    readonly pendingInput: boolean;
     constructor(public kernel: Kernel.IKernelConnection) {
         // We are the session context
 

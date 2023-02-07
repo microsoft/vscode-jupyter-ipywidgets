@@ -3,9 +3,10 @@
 
 'use strict';
 
-import { shims } from '@jupyter-widgets/base';
+import { DOMWidgetView, shims } from '@jupyter-widgets/base';
 import * as jupyterlab from '@jupyter-widgets/jupyterlab-manager';
-import { RenderMimeRegistry, standardRendererFactories } from '@jupyterlab/rendermime';
+import { INotebookModel } from '@jupyterlab/notebook';
+import { IRenderMime, RenderMimeRegistry, standardRendererFactories } from '@jupyterlab/rendermime';
 import { Kernel } from '@jupyterlab/services';
 import { Widget } from '@lumino/widgets';
 import { DocumentContext } from './documentContext';
@@ -20,9 +21,26 @@ export const WIDGET_MIMETYPE = 'application/vnd.jupyter.widget-view+json';
 const widgetsRegisteredInRequireJs = ['@jupyter-widgets/controls', '@jupyter-widgets/base', '@jupyter-widgets/output'];
 
 export class WidgetManager extends jupyterlab.WidgetManager {
-    public kernel: Kernel.IKernelConnection;
+    private _kernel: Kernel.IKernelConnection;
+    public get kernel(): Kernel.IKernelConnection {
+        return this._kernel;
+    }
     public el: HTMLElement;
 
+    /**
+     * Creates an instance of WidgetManager.
+     * @param {Kernel.IKernelConnection} kernel
+     * @param {HTMLElement} el
+     * @param {{
+     *             readonly widgetsRegisteredInRequireJs: Readonly<Set<string>>;
+     *             errorHandler(className: string, moduleName: string, moduleVersion: string, error: any): void;
+     *             loadWidgetScript(moduleName: string, moduleVersion: string): Promise<void>;
+     *             successHandler(className: string, moduleName: string, moduleVersion: string): void;
+     *         }} scriptLoader
+     * @param {(message: string) => void} logger
+     * @param {{}} [widgetState] The widget state saved in the Notebook metadata. Pass this value if required to load widget state from the Notebook.
+     * @memberof WidgetManager
+     */
     constructor(
         kernel: Kernel.IKernelConnection,
         el: HTMLElement,
@@ -32,7 +50,8 @@ export class WidgetManager extends jupyterlab.WidgetManager {
             loadWidgetScript(moduleName: string, moduleVersion: string): Promise<void>;
             successHandler(className: string, moduleName: string, moduleVersion: string): void;
         },
-        private readonly logger: (message: string) => void
+        private readonly logger: (message: string) => void,
+        private readonly widgetState?: {}
     ) {
         super(
             new DocumentContext(kernel),
@@ -41,13 +60,13 @@ export class WidgetManager extends jupyterlab.WidgetManager {
             }),
             { saveState: false }
         );
-        this.kernel = kernel;
+        this._kernel = kernel;
         this.el = el;
         this.rendermime.addFactory(
             {
                 safe: false,
                 mimeTypes: [WIDGET_MIMETYPE],
-                createRenderer: (options) => new jupyterlab.WidgetRenderer(options, this)
+                createRenderer: (options: IRenderMime.IRendererOptions) => new jupyterlab.WidgetRenderer(options, this)
             },
             0
         );
@@ -78,22 +97,34 @@ export class WidgetManager extends jupyterlab.WidgetManager {
      * Get the currently-registered comms.
      */
     public _get_comm_info(): Promise<any> {
+        if (this.widgetState && !this.kernel.username && !this.kernel.clientId && !this.kernel.id) {
+            // Used to load widget state.
+            return Promise.resolve({});
+        }
         return this.kernel
             .requestCommInfo({ target_name: this.comm_target_name })
             .then((reply) => (reply.content as any).comms);
     }
-    public async display_view(msg: any, view: Backbone.View<Backbone.Model>, options: any): Promise<Widget> {
-        const widget = await super.display_view(msg, view, options);
+    public async display_view(_msg: any, view: DOMWidgetView, options: any): Promise<Widget> {
         const element = options.node ? (options.node as HTMLElement) : this.el;
         // When do we detach?
         if (element) {
-            Widget.attach(widget, element);
+            Widget.attach(view.luminoWidget, element);
         }
-        return widget;
+        return view.luminoWidget;
     }
-    public async restoreWidgets(): Promise<void> {
-        // Disabled for now.
-        // This throws errors if enabled, can be added later.
+    public async restoreWidgets(
+        notebook: INotebookModel,
+        options?: {
+            loadKernel: boolean;
+            loadNotebook: boolean;
+        }
+    ): Promise<void> {
+        // Hardcoded to only support loading widgets from the notebook.
+        // This is called from the Jupyter extension in vscode.
+        if (notebook && options?.loadNotebook && !options?.loadKernel) {
+            return super.restoreWidgets(notebook, options);
+        }
     }
 
     // @ts-ignore https://devblogs.microsoft.com/typescript/announcing-typescript-4-0-rc/#properties-overridding-accessors-and-vice-versa-is-an-error

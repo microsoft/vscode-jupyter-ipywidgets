@@ -10,3 +10,16 @@
   * Relative location is to the output folder for this file.
   */
 @import "../node_modules/@jupyter-widgets/controls/css/widgets.css";
+
+/* Display of offline widgets (widgets loaded from notebook metadata) */
+.jupyter-widgets-disconnected::before {
+	content: '\f127';
+	display: inline-block;
+	font: normal normal 900 14px/1 'Font Awesome 5 Free', 'FontAwesome';
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	color: #d9534f;
+	padding: 3px;
+	align-self: flex-start;
+}

@@ -74,6 +74,9 @@ export class SessionConnection implements ISessionConnection {
     public get isDisposed() {
         return this.kernel.isDisposed;
     }
+    public get pendingInput() {
+        return this.kernel.pendingInput as any;
+    }
     public dispose(): void {
         // Don't actually dispose. We control disposal
     }

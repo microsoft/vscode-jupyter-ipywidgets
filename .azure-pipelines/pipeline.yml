@@ -16,7 +16,7 @@ resources:
 
 parameters:
   - name: publishPackage
-    displayName: 🚀 Publish @vscode/jupyter-ipywidgets7
+    displayName: 🚀 Publish @vscode/jupyter-ipywidgets8
     type: boolean
     default: false
 
@@ -24,7 +24,7 @@ extends:
   template: azure-pipelines/npm-package/pipeline.yml@templates
   parameters:
     npmPackages:
-      - name: jupyter-ipywidgets7
+      - name: jupyter-ipywidgets8
         testPlatforms: []
 
         buildSteps:
