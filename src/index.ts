@@ -13,6 +13,7 @@ function load() {
         return;
     }
     require('./widgets.css');
+	require('../node_modules/@fortawesome/fontawesome-free/css/all.min.css');
     console.error('Initializing ipywidgets8');
     // Export the following for `requirejs`.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-empty,@typescript-eslint/no-empty-function
