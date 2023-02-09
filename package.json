@@ -1,6 +1,6 @@
 {
     "name": "@vscode/jupyter-ipywidgets8",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "main": "dist/ipywidgets.js",
     "license": "MIT",
     "repository": {
@@ -15,8 +15,9 @@
     ],
     "scripts": {
         "prepack": "npm run clean && npm run build",
-        "build": "node scripts/postInstall.js && npm run clean && tsc && node scripts/copyfiles.js && webpack --mode=production",
-        "build:dev": "node scripts/postInstall.js &&  npm run clean && tsc && node scripts/copyfiles.js && webpack",
+        "build": "node scripts/postInstall.js && npm run clean && tsc && webpack --mode=production",
+        "build:dev": "node scripts/postInstall.js &&  npm run clean && tsc && webpack",
+        "analyze": "node scripts/postInstall.js &&  npm run clean && tsc && webpack --json > out/stats.json && npx webpack-bundle-analyzer out/stats.json -p=8981",
         "clean": "rimraf out && rimraf tsconfig.tsbuildinfo && rimraf dist",
         "lint": "eslint -c .eslintrc.js --ext .ts src"
     },
