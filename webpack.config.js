@@ -59,13 +59,6 @@ module.exports = [
                                                 });
                                             };
                                         }),
-                                        postcss.plugin('prepend', function () {
-                                            return function (css) {
-                                                css.prepend(
-                                                    "@import './node_modules/@jupyter-widgets/controls/css/labvariables.css';"
-                                                );
-                                            };
-                                        }),
                                         require('postcss-import')(),
                                         require('postcss-preset-env')()
                                     ]
