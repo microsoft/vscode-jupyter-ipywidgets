@@ -12,7 +12,7 @@
     },
     "files": [
         "dist/*.js",
-		"ThirdPartyNotices-Repository.txt"
+        "ThirdPartyNotices-Repository.txt"
     ],
     "scripts": {
         "prepack": "npm run clean && npm run build",
@@ -44,7 +44,6 @@
         "eslint-plugin-prettier": "^3.1.2",
         "eslint-plugin-react": "^7.22.0",
         "eslint-plugin-react-hooks": "^4.0.0",
-        "font-awesome": "^4.7.0",
         "fs-extra": "^10.0.1",
         "isarray": "^2.0.5",
         "postcss": "^8.4.8",
@@ -62,6 +61,7 @@
         "json5": "2.2.3"
     },
     "dependencies": {
+        "font-awesome": "^4.7.0",
         "marked": "^4.0.10"
     }
 }
