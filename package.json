@@ -11,7 +11,8 @@
         "url": "https://github.com/Microsoft/vscode-jupyter-ipywidgets/issues"
     },
     "files": [
-        "dist/*.js"
+        "dist/*.js",
+		"ThirdPartyNotices-Repository.txt"
     ],
     "scripts": {
         "prepack": "npm run clean && npm run build",
