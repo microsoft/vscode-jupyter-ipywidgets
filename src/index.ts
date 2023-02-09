@@ -12,7 +12,7 @@ function load() {
         console.warn('Already loaded ipywidgets7');
         return;
     }
-	require('@lumino/widgets/style/index.css');
+    require('@lumino/widgets/style/index.css');
     require('@jupyter-widgets/base/css/index.css');
     require('@jupyter-widgets/controls/css/widgets.css');
     require('font-awesome/css/font-awesome.css');
