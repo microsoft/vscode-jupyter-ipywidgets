@@ -1,6 +1,6 @@
 {
     "name": "@vscode/jupyter-ipywidgets7",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "main": "dist/ipywidgets.js",
     "license": "MIT",
     "repository": {
@@ -15,8 +15,8 @@
     ],
     "scripts": {
         "prepack": "npm run clean && npm run build",
-        "build": "node scripts/postInstall.js && npm run clean && tsc && node scripts/copyfiles.js && webpack --mode=production",
-        "build:dev": "node scripts/postInstall.js &&  npm run clean && tsc && node scripts/copyfiles.js && webpack",
+        "build": "node scripts/postInstall.js && npm run clean && tsc && webpack --mode=production",
+        "build:dev": "node scripts/postInstall.js &&  npm run clean && tsc && webpack",
         "clean": "rimraf out && rimraf tsconfig.tsbuildinfo && rimraf dist",
         "lint": "eslint -c .eslintrc.js --ext .ts src"
     },

@@ -12,8 +12,10 @@ function load() {
         console.warn('Already loaded ipywidgets7');
         return;
     }
-    require('./widgets.css');
-    require('../node_modules/@fortawesome/fontawesome-free/css/all.min.css');
+	require('@lumino/widgets/style/index.css');
+    require('@jupyter-widgets/base/css/index.css');
+    require('@jupyter-widgets/controls/css/widgets.css');
+    require('font-awesome/css/font-awesome.css');
     // Export the following for `requirejs`.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-empty,@typescript-eslint/no-empty-function
     const define = (window as any).define || function () {};
