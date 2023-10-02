@@ -15,6 +15,17 @@ resources:
       endpoint: Monaco
 
 parameters:
+  - name: nextVersion
+    displayName: '🚀 Release Version (eg: none, major, minor, patch, or X.X.X)'
+    type: string
+    default: 'none'
+  - name: quality
+    displayName: Quality
+    type: string
+    default: latest
+    values:
+      - latest
+      - beta
   - name: publishPackage
     displayName: 🚀 Publish @vscode/jupyter-ipywidgets8
     type: boolean
@@ -31,4 +42,6 @@ extends:
           - script: npm i
             displayName: Install dependencies
 
+        tag: ${{ parameters.quality }}
+        nextVersion: ${{ parameters.nextVersion }}
         publishPackage: ${{ parameters.publishPackage }}
