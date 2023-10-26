@@ -18,7 +18,7 @@
         "prepack": "npm run clean && npm run build",
         "build": "node scripts/postInstall.js && npm run clean && tsc && webpack --mode=production",
         "build:dev": "node scripts/postInstall.js &&  npm run clean && tsc && webpack",
-        "analyze": "node scripts/postInstall.js &&  npm run clean && tsc && webpack --json > out/stats.json && npx webpack-bundle-analyzer out/stats.json -p=8981",
+        "analyze": "node scripts/postInstall.js &&  npm run clean && tsc && webpack --json > out/stats.json && npx webpack-bundle-analyzer out/stats.json -p",
         "clean": "rimraf out && rimraf tsconfig.tsbuildinfo && rimraf dist",
         "lint": "eslint -c .eslintrc.js --ext .ts src"
     },
@@ -85,6 +85,7 @@
         "@lumino/properties": "^2.0.1",
         "@lumino/signaling": "^2.1.2",
         "@lumino/widgets": "^2.3.0",
-        "font-awesome": "^4.7.0"
+        "font-awesome": "^4.7.0",
+        "scheduler": "^0.23.0"
     }
 }

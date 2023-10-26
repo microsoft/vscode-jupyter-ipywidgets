@@ -31,6 +31,14 @@ module.exports = [
             publicPath: 'built/',
             pathinfo: false
         },
+        externals: [
+            // These are used by @jupyterlab/ui-components
+            // However those UI components never end up getting displayed.
+            '@rjsf/core',
+            // These are used by @jupyterlab/ui-components
+            // However those UI components never end up getting displayed.
+            '@rjsf/utils'
+        ],
         resolve: {
             modules: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, './')]
         },
