@@ -18,7 +18,7 @@
         "prepack": "npm run clean && npm run build",
         "build": "node scripts/postInstall.js && npm run clean && tsc && webpack --mode=production",
         "build:dev": "node scripts/postInstall.js &&  npm run clean && tsc && webpack",
-        "analyze": "node scripts/postInstall.js &&  npm run clean && tsc && webpack --json > out/stats.json && npx webpack-bundle-analyzer out/stats.json -p",
+        "analyze": "node scripts/postInstall.js && npm run clean && tsc && webpack --json > out/stats.json && npx webpack-bundle-analyzer out/stats.json -p=8981",
         "clean": "rimraf out && rimraf tsconfig.tsbuildinfo && rimraf dist",
         "lint": "eslint -c .eslintrc.js --ext .ts src"
     },
