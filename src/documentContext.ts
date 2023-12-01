@@ -10,10 +10,9 @@ import { INotebookModel, NotebookModel } from '@jupyterlab/notebook/lib';
 import { IRenderMime } from '@jupyterlab/rendermime';
 import { Contents, Kernel } from '@jupyterlab/services';
 import { Widget } from '@lumino/widgets';
-import { Signal } from './signal';
 import * as KernelSpec from '@jupyterlab/services/lib/kernelspec/kernelspec';
 import { ISessionConnection, IManager } from '@jupyterlab/services/lib/session/session';
-import { ISignal } from '@lumino/signaling';
+import { ISignal, Signal } from '@lumino/signaling';
 import { SessionConnection } from './sessionConnection';
 
 type IKernelChangedArgs = IChangedArgs<Kernel.IKernelConnection | null, Kernel.IKernelConnection | null, 'kernel'>;
@@ -37,6 +36,7 @@ export class DocumentContext implements DocumentRegistry.IContext<INotebookModel
     public terminated = new Signal<this, void>(this);
     public kernelChanged = new Signal<this, IKernelChangedArgs>(this);
     public sessionChanged = new Signal<this, IChangedArgs<ISessionConnection, ISessionConnection, 'session'>>(this);
+    public kernelPreferenceChanged = new Signal<this, IChangedArgs<ISessionContext.IKernelPreference>>(this);
     public propertyChanged = new Signal<this, 'path' | 'name' | 'type'>(this);
     public name: string;
     public type: string;
@@ -119,6 +119,9 @@ export class DocumentContext implements DocumentRegistry.IContext<INotebookModel
         throw new Error('Method not implemented.');
     }
     public selectKernel(): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
+    public startKernel(): Promise<boolean> {
         throw new Error('Method not implemented.');
     }
     public restart(): Promise<boolean> {
