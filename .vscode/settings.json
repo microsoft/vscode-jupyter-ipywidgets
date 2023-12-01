@@ -29,8 +29,6 @@
     },
     "typescript.preferences.quoteStyle": "single",
     "javascript.preferences.quoteStyle": "single",
-    "typescriptHero.imports.stringQuoteStyle": "'",
-    "cucumberautocomplete.skipDocStringsFormat": true,
     "[javascript]": {
         "editor.formatOnSave": true
     },
