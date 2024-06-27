@@ -60,13 +60,13 @@
     "dependencies": {
         "@jupyter-widgets/base": "^6.0.2",
         "@jupyter-widgets/controls": "^5.0.3",
-        "@jupyter-widgets/jupyterlab-manager": "^5.0.5",
+        "@jupyter-widgets/jupyterlab-manager": "^5.0.11",
         "@jupyter-widgets/output": "^6.0.2",
         "@jupyter-widgets/schema": "^0.5.1",
-        "@jupyterlab/apputils": "^3.5.2",
-        "@jupyterlab/docregistry": "^3.5.2",
-        "@jupyterlab/notebook": "^3.5.2",
-        "@jupyterlab/rendermime": "^3.5.2",
+        "@jupyterlab/apputils": "^4.3.3",
+        "@jupyterlab/docregistry": "^4.2.3",
+        "@jupyterlab/notebook": "^4.2.3",
+        "@jupyterlab/rendermime": "^4.2.3",
         "font-awesome": "^4.7.0"
     }
 }
