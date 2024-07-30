@@ -8,15 +8,11 @@ import { ISessionContext } from '@jupyterlab/apputils';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { INotebookModel, NotebookModel } from '@jupyterlab/notebook/lib';
 import { IRenderMime } from '@jupyterlab/rendermime';
-import { Contents, Kernel } from '@jupyterlab/services';
+import { Contents, Kernel, Session, KernelSpec } from '@jupyterlab/services';
 import { Widget } from '@lumino/widgets';
 import { Signal } from './signal';
-import * as KernelSpec from '@jupyterlab/services/lib/kernelspec/kernelspec';
-import { ISessionConnection, IManager } from '@jupyterlab/services/lib/session/session';
 import { ISignal } from '@lumino/signaling';
 import { SessionConnection } from './sessionConnection';
-
-type IKernelChangedArgs = IChangedArgs<Kernel.IKernelConnection | null, Kernel.IKernelConnection | null, 'kernel'>;
 
 // tslint:disable: no-any
 export class DocumentContext implements DocumentRegistry.IContext<INotebookModel>, ISessionContext {
@@ -26,7 +22,7 @@ export class DocumentContext implements DocumentRegistry.IContext<INotebookModel
     public disposed = new Signal<this, void>(this);
     public model: INotebookModel;
     public sessionContext: ISessionContext = this;
-    private sessionConnection: ISessionConnection;
+    private sessionConnection: Session.ISessionConnection;
     public path: string;
     public localPath: string;
     public contentsModel: Contents.IModel;
@@ -35,8 +31,15 @@ export class DocumentContext implements DocumentRegistry.IContext<INotebookModel
     public ready: Promise<void>;
     public isDisposed: boolean;
     public terminated = new Signal<this, void>(this);
-    public kernelChanged = new Signal<this, IKernelChangedArgs>(this);
-    public sessionChanged = new Signal<this, IChangedArgs<ISessionConnection, ISessionConnection, 'session'>>(this);
+    public kernelChanged = new Signal<
+        this,
+        IChangedArgs<Kernel.IKernelConnection | null, Kernel.IKernelConnection | null, 'kernel'>
+    >(this);
+    public sessionChanged = new Signal<
+        this,
+        IChangedArgs<Session.ISessionConnection | null, Session.ISessionConnection | null, 'session'>
+    >(this);
+    public kernelPreferenceChanged = new Signal<this, IChangedArgs<ISessionContext.IKernelPreference>>(this);
     public propertyChanged = new Signal<this, 'path' | 'name' | 'type'>(this);
     public name: string;
     public type: string;
@@ -57,7 +60,7 @@ export class DocumentContext implements DocumentRegistry.IContext<INotebookModel
     public download(): Promise<void> {
         throw new Error('Method not implemented.');
     }
-    public get session(): ISessionConnection {
+    public get session(): Session.ISessionConnection {
         return this.sessionConnection;
     }
     public initialize(): Promise<boolean> {
@@ -102,7 +105,7 @@ export class DocumentContext implements DocumentRegistry.IContext<INotebookModel
     public get prevKernelName(): string {
         return this.kernel.name;
     }
-    public get sessionManager(): IManager {
+    public get sessionManager(): Session.IManager {
         throw new Error('Method not implemented.');
     }
     public get specsManager(): KernelSpec.IManager {
@@ -133,7 +136,9 @@ export class DocumentContext implements DocumentRegistry.IContext<INotebookModel
     public setType(_type: string): Promise<void> {
         throw new Error('Method not implemented.');
     }
-
+    public startKernel(): Promise<boolean> {
+        throw new Error('Method not implemented');
+    }
     public addSibling(_widget: Widget, _options?: any): any {
         throw new Error('Method not implemented.');
     }
