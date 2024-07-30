@@ -15,6 +15,13 @@ resources:
       endpoint: Monaco
 
 parameters:
+  - name: quality
+    displayName: Quality
+    type: string
+    default: latest
+    values:
+      - latest
+      - beta
   - name: publishPackage
     displayName: 🚀 Publish @vscode/jupyter-ipywidgets8
     type: boolean
@@ -31,4 +38,5 @@ extends:
           - script: npm i
             displayName: Install dependencies
 
+        tag: ${{ parameters.quality }}
         publishPackage: ${{ parameters.publishPackage }}
