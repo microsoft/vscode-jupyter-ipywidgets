@@ -56,7 +56,15 @@ export class WidgetManager extends jupyterlab.WidgetManager {
         super(
             new DocumentContext(kernel),
             new RenderMimeRegistry({
-                initialFactories: standardRendererFactories
+                initialFactories: standardRendererFactories,
+                latexTypesetter: {
+                    typeset: (_el: HTMLElement) => {
+                        // Without this labels are not rendered in widgets.
+                        // Either mathjax has to be setup globally or we need a type setter.
+                        // Without either one of these, labels (innerText) are never rendered.
+                        // See https://github.com/jupyter-widgets/ipywidgets/blob/303cae4dc268640a01ce08bf6e22da6c5cd201e4/packages/controls/src/widget_description.ts#L68 
+                    }
+                }
             }),
             { saveState: false }
         );
