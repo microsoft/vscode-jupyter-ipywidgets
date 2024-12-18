@@ -6,11 +6,12 @@
 import { DOMWidgetView, shims } from '@jupyter-widgets/base';
 import * as jupyterlab from '@jupyter-widgets/jupyterlab-manager';
 import { INotebookModel } from '@jupyterlab/notebook';
-import { IRenderMime, RenderMimeRegistry, standardRendererFactories } from '@jupyterlab/rendermime';
+import { IRenderMime, RenderedCommon, RenderMimeRegistry, standardRendererFactories } from '@jupyterlab/rendermime';
 import { Kernel } from '@jupyterlab/services';
 import { Widget } from '@lumino/widgets';
 import { DocumentContext } from './documentContext';
 import { requireLoader } from './widgetLoader';
+
 
 export const WIDGET_MIMETYPE = 'application/vnd.jupyter.widget-view+json';
 
@@ -83,6 +84,28 @@ export class WidgetManager extends jupyterlab.WidgetManager {
             const oldComm = new shims.services.Comm(comm);
             return this.handle_comm_open(oldComm, msg) as Promise<any>;
         });
+    }
+
+    /**
+     * Registers a mime renderer for a given mime type.
+     * We always try to render mime types by simply adding NotebookOutoutItems, 
+     * However sometimes we end up with mime types (outputs) nested withing a Jupyter Output Widget.
+     * In those cases we should let Jupyter Widget manager render the nested output within the output widget.
+     * For that we need to register a mime renderer for the mime type.
+     */
+    public registerMimeRenderer(mimeType: string, render: (model: IRenderMime.IMimeModel)=> Promise<void>): void {
+        this.rendermime.addFactory(
+            {
+                safe: true,
+                mimeTypes: [mimeType],
+                createRenderer: (options: IRenderMime.IRendererOptions) => new class MimeRenderer extends RenderedCommon {
+                    override async render(model: IRenderMime.IMimeModel): Promise<void> {
+                        await render(model);
+                    }
+                }
+                (options)
+            }
+        )
     }
 
     /**
