@@ -80,14 +80,14 @@ export class WidgetManager extends jupyterlab.WidgetManager {
      * In those cases we should let Jupyter Widget manager render the nested output within the output widget.
      * For that we need to register a mime renderer for the mime type.
      */
-    public registerMimeRenderer(mimeType: string, render: (model: IRenderMime.IMimeModel)=> Promise<void>): void {
+    public registerMimeRenderer(mimeType: string, render: (model: IRenderMime.IMimeModel, node: HTMLElement)=> Promise<void>): void {
         this.rendermime.addFactory(
             {
                 safe: true,
                 mimeTypes: [mimeType],
                 createRenderer: (options: IRenderMime.IRendererOptions) => new class MimeRenderer extends RenderedCommon {
                     override async render(model: IRenderMime.IMimeModel): Promise<void> {
-                        await render(model);
+                        await render(model, this.node);
                     }
                 }
                 (options)
