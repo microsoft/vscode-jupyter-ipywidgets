@@ -94,6 +94,7 @@ export class WidgetManager extends jupyterlab.WidgetManager {
      * For that we need to register a mime renderer for the mime type.
      */
     public registerMimeRenderer(mimeType: string, render: (model: IRenderMime.IMimeModel, node: HTMLElement)=> Promise<void>): void {
+        this.rendermime.removeMimeType(mimeType);
         this.rendermime.addFactory(
             {
                 safe: true,
