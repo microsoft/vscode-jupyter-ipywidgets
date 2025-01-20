@@ -68,5 +68,8 @@
         "@jupyterlab/notebook": "^4.2.5",
         "@jupyterlab/rendermime": "^4.2.5",
         "font-awesome": "^4.7.0"
+    },
+    "overrides": {
+        "nanoid@<3.3.8": "3.3.8"
     }
 }
