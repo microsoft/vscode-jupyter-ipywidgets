@@ -15,6 +15,7 @@ function load() {
 	require('@lumino/widgets/style/index.css');
     require('@jupyter-widgets/base/css/index.css');
     require('@jupyter-widgets/controls/css/widgets.css');
+    require('@jupyterlab/rendermime/style/base.css');
     require('font-awesome/css/font-awesome.css');
 
     // Export the following for `requirejs`.
