@@ -12,7 +12,7 @@ on:
     types: [rerequested, requested_action]
 
 env:
-  NODE_VERSION: 16.14.0
+  NODE_VERSION: 22.x
   IS_CI: 1
   SCREENSHOT_PATH: 'src/test/*-screenshot.png'
 
@@ -22,7 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Use Node ${{env.NODE_VERSION}}
         uses: actions/setup-node@v2.1.5
