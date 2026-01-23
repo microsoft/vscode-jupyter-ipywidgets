@@ -41,9 +41,6 @@
     "eslint.options": {
         "ignorePath": "../.eslintignore"
     },
-    "git.branchProtection": [
-        "main",
-        "release*"
-    ],
-    "git.branchProtectionPrompt": "alwaysCommitToNewBranch",
+    "git.branchProtection": ["main", "release*"],
+    "git.branchProtectionPrompt": "alwaysCommitToNewBranch"
 }
