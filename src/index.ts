@@ -19,7 +19,7 @@ function load() {
     require('font-awesome/css/font-awesome.css');
 
     // Export the following for `requirejs`.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-empty,@typescript-eslint/no-empty-function
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const define = (window as any).define || function () {};
     define('@jupyter-widgets/controls', () => widgets);
     define('@jupyter-widgets/base', () => base);
@@ -39,6 +39,7 @@ function unload() {
     }
 
     try {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         const undef = (window as any).undef || function () {};
         undef('@jupyter-widgets/controls');
         undef('@jupyter-widgets/base');
