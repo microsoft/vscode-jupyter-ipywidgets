@@ -193,7 +193,7 @@ export class WidgetManager extends jupyterlab.WidgetManager {
                     }
                     this.logger(`WidgetManager: failed, Loading class ${className}:${moduleName}:${moduleVersion}`);
                     throw originalException;
-                } catch (ex) {
+                } catch (_ex) {
                     this.logger(`WidgetManager: failed, Loading class ${className}:${moduleName}:${moduleVersion}`);
                     this.sendError(className, moduleName, moduleVersion, originalException);
                     throw originalException;
