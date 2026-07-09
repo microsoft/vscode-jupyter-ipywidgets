@@ -2,11 +2,9 @@
 
 const tsParser = require('@typescript-eslint/parser');
 const tsPlugin = require('@typescript-eslint/eslint-plugin');
-const importPlugin = require('eslint-plugin-import');
 const jsdocPlugin = require('eslint-plugin-jsdoc');
 const noNullPlugin = require('eslint-plugin-no-null');
 const preferArrowPlugin = require('eslint-plugin-prefer-arrow');
-const reactPlugin = require('eslint-plugin-react');
 const noOnlyTestsPlugin = require('eslint-plugin-no-only-tests');
 const prettierConfig = require('eslint-config-prettier');
 const prettierTsConfig = require('eslint-config-prettier/@typescript-eslint');
@@ -173,11 +171,9 @@ module.exports = [
             sourceType: 'module'
         },
         plugins: {
-            import: importPlugin,
             jsdoc: jsdocPlugin,
             'no-null': noNullPlugin,
             'prefer-arrow': preferArrowPlugin,
-            react: reactPlugin,
             '@typescript-eslint': tsPlugin,
             'no-only-tests': noOnlyTestsPlugin
         },
@@ -218,16 +214,6 @@ module.exports = [
             // Other rules
             'class-methods-use-this': 'off',
             'func-names': 'off',
-            'import/extensions': 'off',
-            'import/namespace': 'off',
-            'import/no-extraneous-dependencies': 'off',
-            'import/no-unresolved': [
-                'error',
-                {
-                    ignore: ['monaco-editor', 'vscode']
-                }
-            ],
-            'import/prefer-default-export': 'off',
             'linebreak-style': 'off',
             'no-await-in-loop': 'off',
             'no-console': 'off',
@@ -265,28 +251,10 @@ module.exports = [
                 }
             ],
             'operator-assignment': 'off',
-            'react/jsx-uses-vars': 'error',
-            'react/jsx-uses-react': 'error',
             strict: 'off'
         },
         settings: {
-            'import/extensions': ['.ts', '.tsx', '.d.ts', '.js', '.jsx'],
-            'import/external-module-folders': ['node_modules', 'node_modules/@types'],
-            'import/parsers': {
-                '@typescript-eslint/parser': ['.ts', '.tsx', '.d.ts']
-            },
-            'import/resolver': {
-                node: {
-                    extensions: ['.ts', '.tsx', '.d.ts', '.js', '.jsx']
-                }
-            },
-            react: {
-                pragma: 'React',
-                version: 'detect'
-            },
-            propWrapperFunctions: ['forbidExtraProps', 'exact', 'Object.freeze'],
-            'import/core-modules': [],
-            'import/ignore': ['node_modules', '\\.(coffee|scss|css|less|hbs|svg|json)$']
+            propWrapperFunctions: ['forbidExtraProps', 'exact', 'Object.freeze']
         }
     }
 ];
