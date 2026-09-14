@@ -32,7 +32,7 @@ module.exports = [
             pathinfo: false
         },
         resolve: {
-            modules: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, './')]
+            modules: ['node_modules', path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, './')]
         },
         plugins: [
             ...common.getDefaultPlugins('ipywidgets'),
