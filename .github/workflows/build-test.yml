@@ -2,7 +2,7 @@
 name: Build and Test
 
 permissions:
-  deployments: write
+  contents: read
 
 on:
   pull_request:
